@@ -3,15 +3,15 @@ import React from 'react';
 
 function Reciperesult({recipe}){
     return (
-     <div>
+     <div className='test'>
         <li>
-        <h2>{recipe.recipeName}</h2>
+        <h2 className='recipe__heading'>{recipe.recipeName}</h2>
         <img src={recipe.imageUrlsBySize[90]} />
-            <ul>
+            {/* <ul>
                 {recipe.ingredients.map(recipeIngredient => {
                    return <li key={recipeIngredient}>{recipeIngredient}</li>
                 })}
-            </ul>
+            </ul> */}
         </li>
      </div>
     )

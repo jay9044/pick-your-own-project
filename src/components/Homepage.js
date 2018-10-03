@@ -11,9 +11,11 @@ class Homepage extends React.Component {
   render(){
     return (
       <div  className='homepage-container'>
-       <h1>GotFood?</h1> 
+       <h1>GotFood?! <i className="fas fa-utensils"></i></h1> 
+       <p>Type in what you have in your fridge</p>
+       <p>OR</p>
+       
        {/* // replace o with plates and question mark with spagetti */}
-       <p>Be All The Chef You Can Be!</p>
        {this.props.nothingFound ? <h1>Sorry we haven't Got this...</h1> : null}
       
       </div>

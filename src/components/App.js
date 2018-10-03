@@ -14,7 +14,9 @@ class App extends React.Component {
     this.state = {
       recipes: [],
       searchQuery: '',
-      nothingFound:false
+      nothingFound:false,
+      nextPage:false,
+      prevPage: false
     }
     this.handleChange = this.handleChange.bind(this)
     this.searchSubmit = this.searchSubmit.bind(this)
@@ -22,7 +24,7 @@ class App extends React.Component {
 
 
 searchSubmit(){
-  return fetch(`http://api.yummly.com/v1/api/recipes?_app_id=${yummlyID}&_app_key=${yummlyApiKey}&q=${this.state.searchQuery}&requirePictures=true`)
+  return fetch(`http://api.yummly.com/v1/api/recipes?_app_id=${yummlyID}&_app_key=${yummlyApiKey}&q=${this.state.searchQuery}&maxResult=12&requirePictures=true`)
   .then(response => response.json())
   .then(body =>{
     console.log(body)
@@ -55,13 +57,30 @@ handleChange(searchQuery){
   render(){
     return (
       <div className="app">
-        <div className='grid-container'>
-        <Homepage nothingFound={this.state.nothingFound}/>
+      <Homepage nothingFound={this.state.nothingFound}/>
         <Search  
           searchQuery={this.state.searchQuery}
           handleChange={this.handleChange}
           searchSubmit={this.searchSubmit}
         />
+        <div className='select__buttons'>
+          <select name="Health Filter">
+            <option value='#'>Anything Will Do</option>
+            <option value="High Protein">High Protein</option>
+            <option value="#">Low Carbs</option>
+            <option value="#">No Sugar</option>
+            <option value="#">Low Fat</option>
+            </select>
+            
+          <select name="Cusine">
+            <option value="#">All Cusine's(standard)</option>
+            <option value="cuisine^cuisine-american">Americian</option>
+            <option value="cuisine^cuisine-indian">Indians</option>
+            <option value="cuisine^cuisine-italian">Italian</option>
+            <option value="cuisine^cuisine-japanese">Japanese</option>
+            </select>
+         </div>
+        <div className='grid-container'>
        <Reciperesults  recipes={this.state.recipes}/>
        </div>
       </div>
