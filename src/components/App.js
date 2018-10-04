@@ -20,14 +20,14 @@ class App extends React.Component {
       // nextPage:false,
       // prevPage: false
     }
+    this.handleOptionChange = this.handleOptionChange.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.searchSubmit = this.searchSubmit.bind(this)
     
   }
 
-
-searchSubmit(){
-  return fetch(`http://api.yummly.com/v1/api/recipes?_app_id=${yummlyID}&_app_key=${yummlyApiKey}&q=${this.state.searchQuery}&maxResult=12&requirePictures=true`)
+searchSubmit(option){
+  return fetch(`http://api.yummly.com/v1/api/recipes?_app_id=${yummlyID}&_app_key=${yummlyApiKey}&q=${this.state.searchQuery}&maxResult=12&requirePictures=true&${option}`)
   .then(response => response.json())
   .then(body =>{
     console.log(body)
@@ -57,12 +57,11 @@ handleChange(searchQuery){
 }
 
 
-handleOptionChange(){
-  const url = `http://api.yummly.com/v1/api/recipes?_app_id=${yummlyID}&_app_key=${yummlyApiKey}&q=${this.state.searchQuery}&maxResult=12&requirePictures=true&allowedCuisine[]=${this.state.cuisine}`
+handleOptionChange(event){
   this.setState({
       cuisine: event.target.value
-  }, () => this.searchSubmit())
-
+  }, () => this.searchSubmit(this.state.cuisine))
+ 
 }
 
 
@@ -84,12 +83,12 @@ handleOptionChange(){
             <option value="#">Low Fat</option>
             </select>
             
-          <select name="Cusine" onChange={this.handleOptionChange}>
-            <option  value='#'>All Cusine's(standard)</option>
-            <option value="cuisine^cuisine-american">American</option>
-            <option value="cuisine^cuisine-indian">Indian</option>
-            <option value="cuisine^cuisine-italian">Italian</option>
-            <option value="cuisine^cuisine-japanese">Japanese</option>
+          <select name="Cusine" value='#' onChange={this.handleOptionChange}>
+            <option  value='#'>All Cusines(standard)</option>
+            <option value="allowedCuisine[]=cuisine^cuisine-american">American</option>
+            <option value="allowedCuisine[]=cuisine^cuisine-indian">Indian</option>
+            <option value="allowedCuisine[]=cuisine^cuisine-italian">Italian</option>
+            <option value="allowedCuisine[]=cuisine^cuisine-japanese">Japanese</option>
             </select>
          </div>
         <div className='grid-container'>
