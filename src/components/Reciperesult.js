@@ -1,7 +1,5 @@
 import React from 'react';
 
-
-
 // function Reciperesult({recipe, handleClick}){
 //     return (
 //      <div className='test'>
@@ -47,8 +45,7 @@ class Reciperesult extends React.Component {
                 <li>
                 <h2 className='recipe__heading'>{this.props.recipe.recipeName}</h2>
                 <img  onClick={this.handleClick} src={this.props.recipe.imageUrlsBySize[90]} className='puff-in-center meal-image'/>
-                </li>
-                
+                </li>             
         </div>
         )
     }

@@ -6,7 +6,7 @@ function Reciperesults({recipes}){
     return (
      <div className='results'>
       <ul>
-        {recipes.map(recipe => <Reciperesult  key={recipe.id} recipe={recipe}/>)}
+        {recipes.map(recipe => <Reciperesult   key={recipe.id} recipe={recipe}/>)}
       </ul>
      </div>
     );

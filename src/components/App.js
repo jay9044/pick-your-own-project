@@ -3,6 +3,7 @@ import Homepage from './Homepage';
 import Search from './Search';
 import Reciperesults from './Reciperesults';
 
+
 import '../styles/components/app.scss';
 
 const yummlyID = '1bb7c201';
@@ -16,39 +17,33 @@ class App extends React.Component {
     this.state = {
       recipes: [],
       searchQuery: '',
-      nothingFound:false
-      // nextPage:false,
-      // prevPage: false
+      nothingFound:false,
+      buttons: false,
+      start: 9
+
+      
     }
     this.handleHealthChange = this.handleHealthChange.bind(this)
     this.handleCourseChange = this.handleCourseChange.bind(this)
     this.handleCuisineChange = this.handleCuisineChange.bind(this)
+    this.handleNextPage = this.handleNextPage.bind(this)
+    this.handlePrevPage = this.handlePrevPage.bind(this)
     this.handleChange = this.handleChange.bind(this)
     this.searchSubmit = this.searchSubmit.bind(this)
     
   }
 
 searchSubmit(){
-  return fetch(`http://api.yummly.com/v1/api/recipes?_app_id=${yummlyID}&_app_key=${yummlyApiKey}&q=${this.state.searchQuery}&maxResult=9&requirePictures=true&${this.state.cuisine}&${this.state.course}&${this.state.healthOption}`)
+  return fetch(`http://api.yummly.com/v1/api/recipes?_app_id=${yummlyID}&_app_key=${yummlyApiKey}&q=${this.state.searchQuery}&maxResult=9&start=${this.state.start}&requirePictures=true&${this.state.cuisine}&${this.state.course}&${this.state.healthOption}`)
   .then(response => response.json())
   .then(body =>{
     console.log(body)
     const nothingFound = body.matches.length === 0;
     this.setState({
       nothingFound: nothingFound,
-      recipes: nothingFound ? [] : body.matches
+      recipes: nothingFound ? [] : body.matches,
+      buttons: nothingFound ? false : true
     })
-  //   if(body.matches.length === 0){
-  //     this.setState({
-  //       nothingFound: true
-  //     })
-  //     console.log('nothing found')
-  //   }else{
-  //   this.setState({
-  //     recipes: body.matches,
-  //     nothingFound: false
-  //   })
-  // }
     console.log(this.state.recipes)
   })
 }
@@ -78,10 +73,23 @@ handleCuisineChange(event){
 }
 
 
+handleNextPage(event){
+  this.setState({
+      start: this.state.start + 10
+  },() => this.searchSubmit(this.state.start))
+}
+
+handlePrevPage(event){
+  this.setState({
+    start: this.state.start - 10
+  }, () => this.searchSubmit(this.state.start))
+}
+
+
   render(){
     return (
       <div className="app">
-      <Homepage nothingFound={this.state.nothingFound}/>
+      <Homepage  buttons={this.state.buttons} nothingFound={this.state.nothingFound}/>
         <Search  
           searchQuery={this.state.searchQuery}
           handleChange={this.handleChange}
@@ -91,7 +99,7 @@ handleCuisineChange(event){
         {/* drop downs */}
         <div className='select__buttons'>
           <select value={this.state.healthOption} name="Health Filter" onChange={this.handleHealthChange}>
-            <option value='#'>Diet(Health Options)</option>
+            <option value='#'>Diet</option>
             <option value="nutrition.PROCNT.min=20&nutrition.PROCNT.max=50">High Protein</option>
             <option value="nutrition.CHOCDF.min=0&nutrition.CHOCDF.max=20">Low Carbs</option>
             <option value="nutrition.FASAT.min=0&nutrition.FASAT.max=35">Low Fat</option>
@@ -101,22 +109,30 @@ handleCuisineChange(event){
           <select name="Course" value={this.state.course} onChange={this.handleCourseChange}>
             <option  value='#'>Course(Main)</option>
             <option value="allowedCourse[]=course^course-Main Dishes">Main</option>
-            <option value="allowedCourse[]=course^course-Appetizers">Appetizers</option>
+            <option value="allowedCourse[]=course^course-Appetizers">Lunch</option>
+            <option value="allowedCourse[]=course^course-Lunch and Snacks">Appetizers</option>
             <option value="allowedCourse[]=course^course-Soups">Soups</option>
             </select>
 
           <select name="Cuisine" value={this.state.cuisine} onChange={this.handleCuisineChange}>
-            <option  value='#'>All Cuisines(standard)</option>
+            <option  value='#'>All Cuisines</option>
             <option value="allowedCuisine[]=cuisine^cuisine-american">American</option>
             <option value="allowedCuisine[]=cuisine^cuisine-indian">Indian</option>
             <option value="allowedCuisine[]=cuisine^cuisine-italian">Italian</option>
             <option value="allowedCuisine[]=cuisine^cuisine-japanese">Japanese</option>
             <option value="allowedCuisine[]=cuisine^cuisine-thai">Thai</option>
             </select>
-
          </div>
+        
         <div className='grid-container'>
        <Reciperesults   recipes={this.state.recipes}/>
+
+       {/* pagination buttons */}
+       <div className='results-buttons'>
+       {/* ternary to show buttons */}
+        {this.state.buttons && <button onClick={this.handleNextPage}>Next Page(10)</button>}
+        {this.state.buttons && <button onClick={this.handlePrevPage}>Prev Page(10)</button>}
+      </div>
        </div>
       </div>
     )
@@ -125,4 +141,4 @@ handleCuisineChange(event){
 
 export default App;
 
-{/* <RecipeModal  reciever={}/> */}
+
