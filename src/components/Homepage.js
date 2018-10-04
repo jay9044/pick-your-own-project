@@ -11,7 +11,10 @@ class Homepage extends React.Component {
   render(){
     return (
       <div  className='homepage-container'>
+        
        <h1 className='heartbeat'>GotFood?! <i className="fas fa-utensils"></i></h1> 
+       <span className='motto'><strong>The Healthy Alternative!</strong></span>
+      
        <p>Type in what you have in your fridge</p>
        <p>OR</p>
        
