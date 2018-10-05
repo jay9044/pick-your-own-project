@@ -51,7 +51,8 @@ class Reciperesult extends React.Component {
             showSlider: true,
             images: `${body.images[0].imageUrlsBySize[360]}`,
             recipeIngredientLines: body.ingredientLines,
-            star: <i className='star-icon' class="fas fa-star"></i>
+            star: <i className='star-icon' className="fas fa-star"></i>,
+            recipeVideo: `${body.attribution.url}`
         })})
     }
     render(){
@@ -74,9 +75,10 @@ class Reciperesult extends React.Component {
                 <p><strong>Ingredients:</strong></p>
                 <ul>
                     {this.state.recipeIngredientLines.map(recipeIngredient => {
-                        return <li className='ingredients-list' key={this.state.recipeInfo.id}>{recipeIngredient}</li>
+                        return <li className='ingredients-list' key={this.props.recipe.id}>{recipeIngredient}</li>
                     })}
                 </ul>
+                <p><a href={this.state.recipeVideo} target='_blank'>Click Here To Watch This Being Prepared!</a></p>
                 </div>              
         </div>
         )
@@ -89,9 +91,4 @@ export default Reciperesult;
 
 
 
-{/* <ul>
-//                 {recipe.ingredients.map(recipeIngredient => {
-//                    return <li key={recipeIngredient}>{recipeIngredient}</li>
-//                 })}
-//             </ul> */}
       
