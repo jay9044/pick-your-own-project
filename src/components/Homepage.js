@@ -18,7 +18,7 @@ class Homepage extends React.Component {
        <span className='motto'><strong>The Healthy Alternative!</strong></span>
        <p>Type in what you have in your fridge</p>
        <p>OR</p>
-       {this.props.nothingFound && <h1 className='no-result'>Sorry we haven't Got this...<i class="fas fa-sad-cry"></i></h1>}
+       {this.props.nothingFound && <h1 className='no-result'>Sorry we haven't Got this...<i className="fas fa-sad-cry"></i></h1>}
       </div>
     )
   }

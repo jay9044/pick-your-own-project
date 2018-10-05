@@ -1,4 +1,5 @@
 import React from 'react';
+import cx from 'classnames';
 
 // function Reciperesult({recipe, handleClick}){
 //     return (
@@ -22,11 +23,21 @@ import React from 'react';
 class Reciperesult extends React.Component {
     constructor(){
         super()
+        this.closeSliderFunction = this.closeSliderFunction.bind(this)
         this.handleClick = this.handleClick.bind(this)
         this.state ={
-            recipeInfo: {}
+            recipeInfo: {},
+            showSlider: false,
+            recipeIngredientLines: []
         }
     }
+
+   closeSliderFunction(){
+       this.setState({
+           showSlider:false
+       })
+   }
+
 
     handleClick(){
         const yummlyID = '1bb7c201';
@@ -36,16 +47,37 @@ class Reciperesult extends React.Component {
         .then(body =>{
             console.log(body)
              this.setState({
-            recipeInfo: body
+            recipeInfo: body,
+            showSlider: true,
+            images: `${body.images[0].imageUrlsBySize[360]}`,
+            recipeIngredientLines: body.ingredientLines,
+            star: <i className='star-icon' class="fas fa-star"></i>
         })})
     }
     render(){
+        const sliderView = cx('hidden', {'RecipeInfo': this.state.showSlider})
         return(
-        <div className='test'>
+        <div>
                 <li>
                 <h2 className='recipe__heading'>{this.props.recipe.recipeName}</h2>
                 <img  onClick={this.handleClick} src={this.props.recipe.imageUrlsBySize[90]} className='puff-in-center meal-image'/>
-                </li>             
+                </li> 
+
+                {/* //Slider view details */}
+                <div className={sliderView}>
+                <h4 className="closer" onClick={this.closeSliderFunction}>X</h4>
+                <h2 className='ingredients-name'>{this.state.recipeInfo.name}</h2>
+                <h4>CookTime: {this.state.recipeInfo.cookTime || this.state.recipeInfo.totalTime}</h4>  
+                <p>Number Of Servings: {this.state.recipeInfo.numberOfServings}</p>
+                <p>User Rating: {this.state.recipeInfo.rating}{this.state.star}</p>
+                <img src={this.state.images}  className='modal-image'/>
+                <p><strong>Ingredients:</strong></p>
+                <ul>
+                    {this.state.recipeIngredientLines.map(recipeIngredient => {
+                        return <li className='ingredients-list' key={this.state.recipeInfo.id}>{recipeIngredient}</li>
+                    })}
+                </ul>
+                </div>              
         </div>
         )
     }
@@ -56,10 +88,10 @@ export default Reciperesult;
 
 
 
-{/* <ul>
-     {recipe.ingredients.map(recipeIngredient => {
-       return <li key={recipeIngredient}>{recipeIngredient}</li>
-         })}
-       </ul> */}
 
+{/* <ul>
+//                 {recipe.ingredients.map(recipeIngredient => {
+//                    return <li key={recipeIngredient}>{recipeIngredient}</li>
+//                 })}
+//             </ul> */}
       
